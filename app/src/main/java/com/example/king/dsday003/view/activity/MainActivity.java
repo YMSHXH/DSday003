@@ -20,8 +20,10 @@ public class MainActivity extends BaseActivity implements Contact.Iview {
 
     @Override
     protected void initData() {
+        //把Contact.Iview接口设置到Presenter
         presenter = new Presenter(this);
         presenter.login();
+
     }
 
     @Override
