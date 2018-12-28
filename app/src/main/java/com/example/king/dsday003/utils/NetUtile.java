@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -48,13 +49,21 @@ public class NetUtile {
     }
 
     /**
-     * get 方式
+     * post 方式
+     * @param params
      * @param imodule
      */
-    public void toGet(String api,final Contact.Imodule imodule){
+    public void toPost(Map<String, String> params, String api, final Contact.Imodule imodule){
+
+        FormBody.Builder builder = new FormBody.Builder();
+        for (Map.Entry<String, String> p : params.entrySet()) {
+            builder.add(p.getKey(),p.getValue());
+        }
+
         final Request request = new Request.Builder()
                 .url(api)
-                .get()
+                //.get()
+                .post(builder.build())
                 .build();
 
         okHttpClient.newCall(request).enqueue(new Callback() {

@@ -1,5 +1,7 @@
 package com.example.king.dsday003.contact;
 
+import java.util.Map;
+
 public interface Contact {
 
     interface Imodule{
@@ -8,7 +10,7 @@ public interface Contact {
     }
 
     interface ResPD {
-        void setData(Imodule data);
+        void setData(Map<String, String> params,String api, Imodule data);
     }
 
     interface Iview{

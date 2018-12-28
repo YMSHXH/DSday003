@@ -3,6 +3,8 @@ package com.example.king.dsday003.presenter;
 import com.example.king.dsday003.contact.Contact;
 import com.example.king.dsday003.module.Module;
 
+import java.util.Map;
+
 public class Presenter {
 
     private Module module;
@@ -13,9 +15,12 @@ public class Presenter {
         this.module = new Module();
     }
 
-    public void login() {
+    public void login(Map<String, String> params, String api) {
+
+
+
         if (module != null){
-            module.setData(new Contact.Imodule() {
+            module.setData(params,api,new Contact.Imodule() {
                 @Override
                 public void success(Object o) {
                     if (iview != null){

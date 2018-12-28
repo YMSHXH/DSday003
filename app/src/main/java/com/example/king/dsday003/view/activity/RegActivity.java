@@ -1,9 +1,8 @@
 package com.example.king.dsday003.view.activity;
 
 import android.content.Intent;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,20 +18,19 @@ import com.google.gson.Gson;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends BaseActivity implements Contact.Iview {
-
+public class RegActivity extends BaseActivity implements Contact.Iview {
 
     private Presenter presenter;
+
     private EditText mEdUrl;
     private EditText mEdPwd;
     private Button mBtnLogin;
-    private Button mBtnReg;
+    private String url;
+    private String pwd;
 
 
     protected void initView() {
-        //把Contact.Iview接口设置到Presenter
         presenter = new Presenter(this);
-
 
         mEdUrl = (EditText) findViewById(R.id.ed_url);
         mEdPwd = (EditText) findViewById(R.id.ed_pwd);
@@ -40,29 +38,20 @@ public class MainActivity extends BaseActivity implements Contact.Iview {
         mBtnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                login();
-            }
-        });
-        mBtnReg = (Button) findViewById(R.id.btn_zh);
-        mBtnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this,RegActivity.class);
-                startActivityForResult(intent,1000);
+                Res();
             }
         });
     }
 
-    private void login() {
-
+    private void Res() {
         //获取数据
-        String url = mEdUrl.getText().toString();
-        String pwd = mEdPwd.getText().toString();
+        url = mEdUrl.getText().toString();
+        pwd = mEdPwd.getText().toString();
         Map<String,String> params = new HashMap<>();
-        params.put("mobile",url);
-        params.put("password",pwd);
+        params.put("mobile", url);
+        params.put("password", pwd);
 
-        presenter.login(params,Api.LOGIN);
+        presenter.login(params,Api.API);
     }
 
     @Override
@@ -72,7 +61,7 @@ public class MainActivity extends BaseActivity implements Contact.Iview {
 
     @Override
     protected int getResLayId() {
-        return R.layout.activity_main;
+        return R.layout.activity_reg;
     }
 
     @Override
@@ -82,7 +71,7 @@ public class MainActivity extends BaseActivity implements Contact.Iview {
 
     @Override
     public void pwdError(String msg) {
-        Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -95,28 +84,19 @@ public class MainActivity extends BaseActivity implements Contact.Iview {
         String s = (String) o;
         User user = new Gson().fromJson(s, User.class);
         String msg = user.getMsg();
-        Toast.makeText(MainActivity.this,msg,Toast.LENGTH_SHORT).show();
-        if ("登录成功".equals(msg)){
-            Intent intent = new Intent(MainActivity.this,MessageActivity.class);
-            startActivity(intent);
+        Toast.makeText(RegActivity.this,msg,Toast.LENGTH_SHORT).show();
+        if ("注册成功".equals(msg)){
+            Intent intent = new Intent();
+            intent.putExtra("mobile", url);
+            intent.putExtra("password", pwd);
+            setResult(2000,intent);
             finish();
         }
+
     }
 
     @Override
     public void successMsg(String msg) {
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000 && resultCode == 2000){
-            String mobile = data.getStringExtra("mobile");
-            String password = data.getStringExtra("password");
-
-            mEdUrl.setText(mobile);
-            mEdPwd.setText(password);
-        }
     }
 }
